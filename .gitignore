@@ -1,0 +1,6 @@
+.history/
+evea.db
+logs/
+docs
+.idea/
+.DS_Store
