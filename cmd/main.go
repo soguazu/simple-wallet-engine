@@ -1,19 +1,19 @@
 package main
 
 import (
-	"github.com/soguazu/boilerplate_golang/cmd/server"
-	_ "github.com/soguazu/boilerplate_golang/docs"
-	"github.com/soguazu/boilerplate_golang/pkg/database"
 	"log"
+	"wallet_engine/cmd/server"
+	_ "wallet_engine/docs"
+	"wallet_engine/pkg/database"
 )
 
-// @title Evea Core Business Swagger API
+// @title Wallet Engine API
 // @version 1.0
-// @description Evea Core Business Swagger API.
+// @description Wallet Engine API.
 // @termsOfService http://swagger.io/terms/
 
 // @contact.name Evea Team API Support
-// @contact.email info@evea.com
+// @contact.email info@test.com
 
 // @license.name MIT
 // @license.url https://github.com/sguazu

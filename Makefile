@@ -40,7 +40,8 @@ test:
 	go test -v -cover ./...
 .PHONY:seed
 
-swagger:
+swagger: |
+	go install github.com/swaggo/swag/cmd/swag@v1.8.1
 	 ./start.sh
 .PHONY:swagger
 

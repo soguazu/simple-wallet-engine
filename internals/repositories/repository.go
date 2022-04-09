@@ -2,10 +2,9 @@ package repositories
 
 import (
 	"fmt"
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
-	"github.com/soguazu/boilerplate_golang/pkg/utils"
 	"gorm.io/gorm"
+	"wallet_engine/internals/core/ports"
+	"wallet_engine/pkg/utils"
 )
 
 type Repository[T ports.RequestDTO] struct {
@@ -34,14 +33,6 @@ func (r *Repository[T]) GetByID(id string) (*T, error) {
 		return nil, err
 	}
 	return &payload, nil
-}
-
-func (r *Repository[T]) GetBy(filter interface{}) ([]T, error) {
-	var payload []T
-	if err := r.db.Model(&domain.Company{}).Find(&payload, filter).Error; err != nil {
-		return nil, err
-	}
-	return payload, nil
 }
 
 func (r *Repository[T]) Persist(payload *T) error {

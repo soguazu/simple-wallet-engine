@@ -1,10 +1,10 @@
 package ports
 
 import (
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
+	"wallet_engine/internals/core/domain"
 )
 
 // RequestDTO declaring input DTO
 type RequestDTO interface {
-	domain.Company
+	domain.Wallet
 }

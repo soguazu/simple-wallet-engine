@@ -2,15 +2,15 @@ package logger
 
 import (
 	"fmt"
-	"github.com/olivere/elastic"
+	"github.com/olivere/elastic/v7"
 	log "github.com/sirupsen/logrus"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
-	"github.com/soguazu/boilerplate_golang/pkg/config"
-	"gopkg.in/sohlich/elogrus.v3"
+	"gopkg.in/sohlich/elogrus.v7"
 	"io"
 	"os"
 	"runtime"
 	"strings"
+	"wallet_engine/internals/core/ports"
+	"wallet_engine/pkg/config"
 )
 
 type logger struct {

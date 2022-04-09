@@ -2,10 +2,10 @@ package database
 
 import (
 	"fmt"
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"wallet_engine/internals/core/domain"
+	"wallet_engine/internals/core/ports"
 )
 
 type sqliteDatastore struct {
@@ -27,9 +27,11 @@ func (d *sqliteDatastore) ConnectDB(dsn string) *gorm.DB {
 	}
 
 	fmt.Println("Established database connection")
+
+	d.MigrateAll(db)
 	return db
 }
 
 func (d *sqliteDatastore) MigrateAll(db *gorm.DB) error {
-	return db.AutoMigrate(&domain.Company{})
+	return db.AutoMigrate(&domain.Wallet{})
 }

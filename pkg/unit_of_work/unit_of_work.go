@@ -2,8 +2,8 @@ package tx
 
 import (
 	log "github.com/sirupsen/logrus"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
 	"gorm.io/gorm"
+	"wallet_engine/internals/core/ports"
 )
 
 type gormUnitOfWork struct {

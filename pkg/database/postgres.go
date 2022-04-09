@@ -2,10 +2,10 @@ package database
 
 import (
 	"fmt"
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"wallet_engine/internals/core/domain"
+	"wallet_engine/internals/core/ports"
 )
 
 type datastore struct {
@@ -32,5 +32,5 @@ func (d *datastore) ConnectDB(dsn string) *gorm.DB {
 }
 
 func (d *datastore) MigrateAll(db *gorm.DB) error {
-	return db.AutoMigrate(&domain.Company{})
+	return db.AutoMigrate(&domain.Wallet{})
 }

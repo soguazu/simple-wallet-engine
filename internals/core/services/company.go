@@ -1,116 +1,72 @@
 package services
 
 import (
-	"errors"
 	log "github.com/sirupsen/logrus"
-	"github.com/soguazu/boilerplate_golang/internals/repositories"
+	"wallet_engine/internals/repositories"
 
-	"github.com/soguazu/boilerplate_golang/internals/common"
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
-	"github.com/soguazu/boilerplate_golang/pkg/utils"
+	"wallet_engine/internals/common"
+	"wallet_engine/internals/core/domain"
+	"wallet_engine/internals/core/ports"
 )
 
-type companyService struct {
-	CompanyRepository repositories.Repository[domain.Company]
-	logger            *log.Logger
+type walletService struct {
+	WalletRepository repositories.Repository[domain.Wallet]
+	logger           *log.Logger
 }
 
-// NewCompanyService function create a new instance for service
-func NewCompanyService(cr repositories.Repository[domain.Company], l *log.Logger) ports.ICompanyService {
-	return &companyService{
-		CompanyRepository: cr,
-		logger:            l,
+// NewWalletService function create a new instance for service
+func NewWalletService(cr repositories.Repository[domain.Wallet], l *log.Logger) ports.IWalletService {
+	return &walletService{
+		WalletRepository: cr,
+		logger:           l,
 	}
 }
 
-func (c *companyService) GetCompanyByID(id string) (*domain.Company, error) {
-	company, err := c.CompanyRepository.GetByID(id)
+func (w *walletService) GetWalletByID(id string) (*domain.Wallet, error) {
+	wallet, err := w.WalletRepository.GetByID(id)
 	if err != nil {
 		return nil, err
 	}
-	return company, nil
+	return wallet, nil
 }
 
-func (c *companyService) GetCompany(filter interface{}) ([]domain.Company, error) {
-	companies, err := c.CompanyRepository.GetBy(filter)
+func (w *walletService) CreateWallet(wallet *domain.Wallet) error {
+	err := w.WalletRepository.Persist(wallet)
 	if err != nil {
-		c.logger.Error(err)
-		return nil, err
-	}
-	return companies, nil
-}
-
-func (c *companyService) GetAllCompany(pagination *utils.Pagination) (*utils.Pagination, error) {
-	companies, err := c.CompanyRepository.Get(pagination)
-	if err != nil {
-		c.logger.Error(err)
-		return nil, err
-	}
-	return companies, nil
-}
-
-func (c *companyService) CreateCompany(company *domain.Company) error {
-	var entity []domain.Company
-	entity, err := c.CompanyRepository.GetBy(domain.Company{Owner: company.Owner, Name: company.Name})
-	if err != nil {
-		return err
-	}
-
-	if len(entity) > 0 {
-		return errors.New("already exist")
-	}
-
-	err = c.CompanyRepository.Persist(company)
-
-	if err != nil {
-		c.logger.Error(err)
-		return err
-	}
-
-	return nil
-}
-
-func (c *companyService) DeleteCompany(id string) error {
-	err := c.CompanyRepository.Delete(id)
-	if err != nil {
-		c.logger.Error(err)
+		w.logger.Error(err)
 		return err
 	}
 	return nil
 }
 
-func (c *companyService) UpdateCompany(params common.GetByIDRequest, body common.UpdateCompanyRequest) (*domain.Company, error) {
-	company, err := c.CompanyRepository.GetByID(params.ID)
+func (w *walletService) DeleteWallet(id string) error {
+	err := w.WalletRepository.Delete(id)
 	if err != nil {
-		c.logger.Error(err)
+		w.logger.Error(err)
+		return err
+	}
+	return nil
+}
+
+func (w *walletService) UpdateWallet(params common.GetByIDRequest, body common.UpdateWalletRequest) (*domain.Wallet, error) {
+	wallet, err := w.WalletRepository.GetByID(params.ID)
+	if err != nil {
+		w.logger.Error(err)
 		return nil, err
 	}
-	if body.Type != nil {
-		(*company).Type = *body.Type
+	if body.Status != nil {
+		(*wallet).Status = *body.Status
 	}
 
-	if body.Website != nil {
-		(*company).Website = *body.Website
+	if body.Balance != nil {
+		(*wallet).Balance = *body.Balance
 	}
 
-	if body.Name != nil {
-		(*company).Name = *body.Name
-	}
-
-	if body.NoOfEmployee != nil {
-		(*company).NoOfEmployee = *body.NoOfEmployee
-	}
-
-	if body.FundingSource != nil {
-		(*company).FundingSource = *body.FundingSource
-	}
-
-	err = c.CompanyRepository.Update(company)
+	err = w.WalletRepository.Update(wallet)
 
 	if err != nil {
-		c.logger.Error(err)
+		w.logger.Error(err)
 		return nil, err
 	}
-	return company, nil
+	return wallet, nil
 }

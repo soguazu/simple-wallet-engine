@@ -3,13 +3,13 @@ package server
 import (
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
-	"github.com/soguazu/boilerplate_golang/internals/core/domain"
-	"github.com/soguazu/boilerplate_golang/internals/core/services"
+	"wallet_engine/internals/core/domain"
+	"wallet_engine/internals/core/services"
 
-	"github.com/soguazu/boilerplate_golang/internals/handlers"
-	"github.com/soguazu/boilerplate_golang/internals/repositories"
-	"github.com/soguazu/boilerplate_golang/pkg/config"
-	"github.com/soguazu/boilerplate_golang/pkg/logger"
+	"wallet_engine/internals/handlers"
+	"wallet_engine/internals/repositories"
+	"wallet_engine/pkg/config"
+	"wallet_engine/pkg/logger"
 )
 
 // Injection inject all dependencies
@@ -24,19 +24,18 @@ func Injection() {
 	}
 
 	var (
-		ginRoutes         = NewGinRouter(gin.Default())
-		companyRepository = repositories.NewRepository[domain.Company](DBConnection)
-		companyService    = services.NewCompanyService(*companyRepository, logging)
-		companyHandler    = handlers.NewCompanyHandler(companyService, logging, "Company")
+		ginRoutes        = NewGinRouter(gin.Default())
+		walletRepository = repositories.NewRepository[domain.Wallet](DBConnection)
+		walletService    = services.NewWalletService(*walletRepository, logging)
+		walletHandler    = handlers.NewWalletHandler(walletService, logging, "Wallet")
 	)
 
 	v1 := ginRoutes.GROUP("v1")
-	company := v1.Group("/company")
-	company.GET("/:id", companyHandler.GetCompanyByID)
-	company.GET("/", companyHandler.GetAllCompany)
-	company.POST("/", companyHandler.CreateCompany)
-	company.DELETE("/:id", companyHandler.DeleteCompany)
-	company.PATCH("/:id", companyHandler.UpdateCompany)
+	wallet := v1.Group("/wallet")
+	wallet.GET("/:id", walletHandler.GetWalletByID)
+	wallet.POST("/", walletHandler.CreateWallet)
+	wallet.DELETE("/:id", walletHandler.DeleteWallet)
+	wallet.PATCH("/:id", walletHandler.UpdateWallet)
 
 	err := ginRoutes.SERVE()
 

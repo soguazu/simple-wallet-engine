@@ -1,10 +1,10 @@
 package server
 
 import (
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
-	"github.com/soguazu/boilerplate_golang/pkg/config"
 	"gorm.io/gorm"
 	"log"
+	"wallet_engine/internals/core/ports"
+	"wallet_engine/pkg/config"
 )
 
 // DBConnection stores the instance of the Database
@@ -24,14 +24,6 @@ func Run(database ports.IDatabase) error {
 		log.Fatal(err)
 		return err
 	}
-
-	//defer func() {
-	//	sqlDB, _ := DBConnection.DB()
-	//	err := sqlDB.Close()
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	}
-	//}()
 
 	return nil
 }

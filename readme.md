@@ -1,6 +1,6 @@
-# Boilerplate
+# Simple Wallet Engine
 
-Company service manages everything that has to do with a company.
+Wallet engine simulates wallet transactions.
 
 ## Built with:
 - [Golang](https://go.dev/dl/)
@@ -12,12 +12,14 @@ Company service manages everything that has to do with a company.
 
 Use the package manager [go modules](https://go.dev/blog/using-go-modules) to install all dependencies.
 
+NOTE: Docker must be installed before this application
+
 ```bash
-git clone https://github.com/soguazu/boilerplate_golang
+git clone https://github.com/soguazu/wallet_engine .git
 ```
 
 ```bash
-cd boilerplate_golang
+cd wallet_engine 
 ```
 
 ```bash

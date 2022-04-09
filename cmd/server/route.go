@@ -3,12 +3,12 @@ package server
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/soguazu/boilerplate_golang/internals/core/ports"
-	"github.com/soguazu/boilerplate_golang/pkg/config"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"strconv"
+	"wallet_engine/internals/core/ports"
+	"wallet_engine/pkg/config"
 )
 
 // Injection function allow dependency injection into provided methods
