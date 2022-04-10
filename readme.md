@@ -12,7 +12,7 @@ Wallet engine simulates wallet transactions.
 
 Use the package manager [go modules](https://go.dev/blog/using-go-modules) to install all dependencies.
 
-NOTE: Docker must be installed before this application
+NOTE: Docker must be installed before running this application
 
 ```bash
 git clone https://github.com/soguazu/wallet_engine .git
