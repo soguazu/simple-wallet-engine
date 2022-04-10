@@ -19,7 +19,7 @@ git clone https://github.com/soguazu/simple-wallet-engine.git
 ```
 
 ```bash
-cd simple-wallet_engine 
+cd simple-wallet-engine 
 ```
 
 ```bash
