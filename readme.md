@@ -15,11 +15,11 @@ Use the package manager [go modules](https://go.dev/blog/using-go-modules) to in
 NOTE: Docker must be installed before running this application
 
 ```bash
-git clone https://github.com/soguazu/wallet_engine .git
+git clone https://github.com/soguazu/simple-wallet-engine.git
 ```
 
 ```bash
-cd wallet_engine 
+cd simple-wallet_engine 
 ```
 
 ```bash
