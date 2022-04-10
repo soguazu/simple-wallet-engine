@@ -6,4 +6,5 @@ import "gorm.io/gorm"
 type IDatabase interface {
 	ConnectDB(url string) *gorm.DB
 	MigrateAll(db *gorm.DB) error
+	DropAll(db *gorm.DB) error
 }

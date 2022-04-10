@@ -6,5 +6,5 @@ import (
 
 // RequestDTO declaring input DTO
 type RequestDTO interface {
-	domain.Wallet
+	domain.Wallet | domain.Transaction
 }

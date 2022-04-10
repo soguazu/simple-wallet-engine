@@ -12,7 +12,7 @@ import (
 // @description Wallet Engine API.
 // @termsOfService http://swagger.io/terms/
 
-// @contact.name Evea Team API Support
+// @contact.name Team API Support
 // @contact.email info@test.com
 
 // @license.name MIT

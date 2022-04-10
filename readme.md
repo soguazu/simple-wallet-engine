@@ -42,7 +42,7 @@ make postgres
 make createdb
 
 # To run build swagger docs and run service
-make swagger
+make start
 
 # To run both unit and integration test
 make test

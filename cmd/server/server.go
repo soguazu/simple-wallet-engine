@@ -20,6 +20,7 @@ func Run(database ports.IDatabase) error {
 
 	DBConnection = database.ConnectDB(config.Instance.DatabaseURL)
 	err = database.MigrateAll(DBConnection)
+	//_ = database.DropAll(DBConnection)
 	if err != nil {
 		log.Fatal(err)
 		return err

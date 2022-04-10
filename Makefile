@@ -17,11 +17,11 @@ dev: vet
 	@reflex -r '.go' -s -- go run cmd/main.go
 
 postgres:
-	docker run --rm -it --name postgresEvea -p 5433:5432 -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=e4dd99ae701 -d postgres:13.6-alpine
+	docker run --rm -it --name postgresWallet -p 5434:5432 -e POSTGRES_USER=root  -e POSTGRES_PASSWORD=e4dd99ae701 -d postgres:13.6-alpine
 .PHONY:postgres
 
 createdb:
-	docker exec -it postgresEvea createdb --username=root --owner=root evea-db
+	docker exec -it postgresWallet createdb --username=root --owner=root wallet-engine-db
 .PHONY:createdb
 
 elastic:
@@ -40,7 +40,7 @@ test:
 	go test -v -cover ./...
 .PHONY:seed
 
-swagger: |
+start: |
 	go install github.com/swaggo/swag/cmd/swag@v1.8.1
 	 ./start.sh
 .PHONY:swagger

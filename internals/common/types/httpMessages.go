@@ -8,6 +8,8 @@ type Messages string
 const (
 	// CREATED creates types of response messages for post endpoint
 	CREATED Messages = "created successfully"
+	// CREATED_TRANSACTION creates types of response messages for post endpoint
+	CREATED_TRANSACTION Messages = "transaction created successfully"
 	// OKAY creates types of response messages for get endpoint
 	OKAY = "retrieved successfully"
 	// DELETED creates types of response messages for delete endpoint

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	uuid "github.com/satori/go.uuid"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -76,7 +77,7 @@ func (wh *walletHandler) GetWalletByID(c *gin.Context) {
 // @Tags         wallet
 // @Accept       json
 // @Produce      json
-// @Param wallet body common.CreateWalletRequest true "Add company"
+// @Param wallet body common.CreateWalletRequest true "active or inactive"
 // @Success      200  {object}  common.GetWalletResponse
 // @Failure      400  {object}  common.Error
 // @Failure      500  {object}  common.Error
@@ -90,9 +91,10 @@ func (wh *walletHandler) CreateWallet(c *gin.Context) {
 	}
 
 	wallet := &domain.Wallet{
-		Owner:   body.Owner,
-		Balance: 0,
-		Status:  domain.ACTIVE,
+		Owner:     uuid.NewV4(),
+		Status:    domain.State(body.Status),
+		Balance:   0,
+		AccountID: (&utils.Faker{}).RandomAccount(1000000000, 9999999999),
 	}
 
 	err := wh.WalletService.CreateWallet(wallet)
@@ -134,21 +136,57 @@ func (wh walletHandler) DeleteWallet(c *gin.Context) {
 
 // UpdateWallet godoc
 // @Summary      Update a wallet by ID
-// @Description  update wallet by id
+// @Description  activate or deactivate wallet by id
 // @Tags         wallet
 // @Accept       json
 // @Produce      json
-// @Param        id   path      string  true  "Company ID"
-// @Param wallet body common.UpdateWalletRequest true "Update wallet"
+// @Param        id   path      string  true  "Wallet ID"
+// @Param        status query   string  true  "active or inactive"
 // @Success      200  {object}  common.GetWalletResponse
 // @Failure      400  {object}  common.Error
 // @Failure      404  {object}  common.Error
 // @Failure      500  {object}  common.Error
-// @Router       /wallet/{id} [patch]
+// @Router       /wallet/{id}/activate [patch]
 func (wh *walletHandler) UpdateWallet(c *gin.Context) {
-	var body common.UpdateWalletRequest
+	var query common.UpdateWalletRequest
 	var params common.GetByIDRequest
+	if err := c.ShouldBindUri(&params); err != nil {
+		wh.logger.Error(err)
+		c.JSON(http.StatusBadRequest, result.ReturnErrorResult(err.Error()))
+		return
+	}
 
+	if err := c.ShouldBindQuery(&query); err != nil {
+		wh.logger.Error(err)
+		c.JSON(http.StatusBadRequest, result.ReturnErrorResult(err.Error()))
+		return
+	}
+
+	wallet, err := wh.WalletService.UpdateWallet(params, query)
+	if err != nil {
+		wh.logger.Error(err)
+		c.JSON(http.StatusBadRequest, result.ReturnErrorResult(err.Error()))
+		return
+	}
+	c.JSON(http.StatusOK, result.ReturnSuccessResult(wallet, message.GetResponseMessage(wh.handlerName, types.UPDATED)))
+}
+
+// TransactionWallet godoc
+// @Summary      Transaction on a wallet by ID
+// @Description  debit or credit wallet by id
+// @Tags         wallet
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Wallet ID"
+// @Param wallet body common.CreateTransactionRequest true "Create transaction"
+// @Success      200  {object}  common.CreateTransactionResponse
+// @Failure      400  {object}  common.Error
+// @Failure      404  {object}  common.Error
+// @Failure      500  {object}  common.Error
+// @Router       /wallet/{id} [patch]
+func (wh *walletHandler) TransactionWallet(c *gin.Context) {
+	var body common.CreateTransactionRequest
+	var params common.GetByIDRequest
 	if err := c.ShouldBindUri(&params); err != nil {
 		wh.logger.Error(err)
 		c.JSON(http.StatusBadRequest, result.ReturnErrorResult(err.Error()))
@@ -161,11 +199,12 @@ func (wh *walletHandler) UpdateWallet(c *gin.Context) {
 		return
 	}
 
-	company, err := wh.WalletService.UpdateWallet(params, body)
+	transaction, err := wh.WalletService.CreateTransaction(params, body)
 	if err != nil {
 		wh.logger.Error(err)
-		c.JSON(http.StatusInternalServerError, result.ReturnErrorResult(err.Error()))
+		c.JSON(http.StatusBadRequest, result.ReturnErrorResult(err.Error()))
 		return
 	}
-	c.JSON(http.StatusOK, result.ReturnSuccessResult(company, message.GetResponseMessage(wh.handlerName, types.UPDATED)))
+
+	c.JSON(http.StatusOK, result.ReturnSuccessResult(transaction, message.GetResponseMessage(wh.handlerName, types.CREATED_TRANSACTION)))
 }

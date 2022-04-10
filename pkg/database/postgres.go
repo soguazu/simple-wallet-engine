@@ -32,5 +32,12 @@ func (d *datastore) ConnectDB(dsn string) *gorm.DB {
 }
 
 func (d *datastore) MigrateAll(db *gorm.DB) error {
-	return db.AutoMigrate(&domain.Wallet{})
+	return db.AutoMigrate(
+		&domain.Wallet{},
+		&domain.Transaction{},
+	)
+}
+
+func (d *datastore) DropAll(db *gorm.DB) error {
+	return db.Migrator().DropTable(&domain.Wallet{})
 }

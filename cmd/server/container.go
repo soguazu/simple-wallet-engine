@@ -24,10 +24,11 @@ func Injection() {
 	}
 
 	var (
-		ginRoutes        = NewGinRouter(gin.Default())
-		walletRepository = repositories.NewRepository[domain.Wallet](DBConnection)
-		walletService    = services.NewWalletService(*walletRepository, logging)
-		walletHandler    = handlers.NewWalletHandler(walletService, logging, "Wallet")
+		ginRoutes             = NewGinRouter(gin.Default())
+		walletRepository      = repositories.NewRepository[domain.Wallet](DBConnection)
+		transactionRepository = repositories.NewRepository[domain.Transaction](DBConnection)
+		walletService         = services.NewWalletService(*walletRepository, *transactionRepository, logging, DBConnection)
+		walletHandler         = handlers.NewWalletHandler(walletService, logging, "Wallet")
 	)
 
 	v1 := ginRoutes.GROUP("v1")
@@ -35,7 +36,8 @@ func Injection() {
 	wallet.GET("/:id", walletHandler.GetWalletByID)
 	wallet.POST("/", walletHandler.CreateWallet)
 	wallet.DELETE("/:id", walletHandler.DeleteWallet)
-	wallet.PATCH("/:id", walletHandler.UpdateWallet)
+	wallet.PATCH("/:id/activate", walletHandler.UpdateWallet)
+	wallet.PATCH("/:id", walletHandler.TransactionWallet)
 
 	err := ginRoutes.SERVE()
 

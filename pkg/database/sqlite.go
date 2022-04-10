@@ -35,3 +35,7 @@ func (d *sqliteDatastore) ConnectDB(dsn string) *gorm.DB {
 func (d *sqliteDatastore) MigrateAll(db *gorm.DB) error {
 	return db.AutoMigrate(&domain.Wallet{})
 }
+
+func (d *sqliteDatastore) DropAll(db *gorm.DB) error {
+	return db.Migrator().DropTable(&domain.Wallet{})
+}

@@ -6,9 +6,27 @@ import (
 	"wallet_engine/internals/core/domain"
 )
 
-// CreateWalletRequest DTO to create company
+// CreateWalletRequest DTO to create wallet
 type CreateWalletRequest struct {
-	Owner uuid.UUID `json:"owner" binding:"required"`
+	Status string `json:"status" binding:"required"`
+}
+
+// CreateTransactionRequest DTO to create transaction
+type CreateTransactionRequest struct {
+	TransactionType string `json:"transaction_type" binding:"required"`
+	Purpose         string `json:"purpose" binding:"required"`
+	Amount          int64  `json:"amount" binding:"required"`
+	AccountID       string `json:"account_id" binding:"required"`
+}
+
+// GetTransactionResponse DTO to create transaction
+type GetTransactionResponse struct {
+	TransactionType string `json:"transaction_type"`
+	Purpose         string `json:"purpose"`
+	Amount          int64  `json:"amount"`
+	AccountID       string `json:"account_id"`
+	BalanceBefore   int64  `json:"balance_before"`
+	BalanceAfter    int64  `json:"balance_after"`
 }
 
 // CreateWalletResponse DTO return wallet
@@ -18,12 +36,20 @@ type CreateWalletResponse struct {
 	Data    domain.Wallet `json:"data"`
 }
 
+// CreateTransactionResponse DTO return transaction
+type CreateTransactionResponse struct {
+	Success bool               `json:"success"`
+	Message string             `json:"message"`
+	Data    domain.Transaction `json:"data"`
+}
+
 // GetWalletResponse DTO
 type GetWalletResponse struct {
-	ID      uuid.UUID    `json:"id" binding:"required"`
-	Owner   uuid.UUID    `json:"owner" binding:"required"`
-	Balance int64        `json:"balance" binding:"required"`
-	Status  domain.State `json:"status"`
+	ID        uuid.UUID    `json:"id" binding:"required"`
+	Owner     uuid.UUID    `json:"owner" binding:"required"`
+	Balance   int64        `json:"balance" binding:"required"`
+	Status    domain.State `json:"status"`
+	AccountID int32        `json:"account_id" binding:"required"`
 }
 
 // GetWalletByIDRequest DTO to get wallet by id
@@ -33,8 +59,7 @@ type GetWalletByIDRequest struct {
 
 // UpdateWalletRequest DTO to update wallet
 type UpdateWalletRequest struct {
-	Status  *domain.State `json:"name,omitempty"`
-	Balance *int64        `json:"balance,omitempty"`
+	Status *string `json:"status,omitempty" form:"status"`
 }
 
 // Error struct

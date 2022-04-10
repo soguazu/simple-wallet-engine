@@ -21,16 +21,16 @@ import (
 	"wallet_engine/internals/repositories"
 	datastore "wallet_engine/pkg/database"
 	"wallet_engine/pkg/logger"
-	"wallet_engine/pkg/utils"
 )
 
 var (
-	db               = datastore.NewSqliteDatabase()
-	DBConnection     = db.ConnectDB(filepath.Join("..", "..", "wallet.db"))
-	logging          = logger.NewLogger(log.New()).MakeLogger(filepath.Join("..", "..", "logs", "info"), true)
-	walletRepository = repositories.NewRepository[domain.Wallet](DBConnection)
-	walletService    = services.NewWalletService(*walletRepository, logging)
-	handler          = NewWalletHandler(walletService, logging, "Wallet")
+	db                    = datastore.NewSqliteDatabase()
+	DBConnection          = db.ConnectDB(filepath.Join("..", "..", "wallet.db"))
+	logging               = logger.NewLogger(log.New()).MakeLogger(filepath.Join("..", "..", "logs", "info"), true)
+	walletRepository      = repositories.NewRepository[domain.Wallet](DBConnection)
+	transactionRepository = repositories.NewRepository[domain.Transaction](DBConnection)
+	walletService         = services.NewWalletService(*walletRepository, *transactionRepository, logging, DBConnection)
+	handler               = NewWalletHandler(walletService, logging, "Wallet")
 )
 
 func SetupRouter() *gin.Engine {
@@ -42,7 +42,7 @@ func createWallet(t *testing.T) *common.CreateWalletResponse {
 	r := SetupRouter()
 	r.POST("/v1/wallet", handler.CreateWallet)
 	entity := common.CreateWalletRequest{
-		Owner: (&utils.Faker{}).RandomUUID(),
+		Status: "active",
 	}
 
 	jsonValue, _ := json.Marshal(entity)
@@ -132,7 +132,7 @@ func TestWalletHandler_UpdateWallet(t *testing.T) {
 
 	endpoint := fmt.Sprintf("/v1/wallet/%v", wallet.Data.ID.String())
 
-	var status domain.State = "active"
+	var status string = "active"
 
 	body := common.UpdateWalletRequest{
 		Status: &status,

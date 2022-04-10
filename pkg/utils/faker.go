@@ -65,3 +65,8 @@ func (f *Faker) RandomFundSource() string {
 func (f *Faker) RandomNoOfEmployee() int32 {
 	return f.RandomInt(0, 10)
 }
+
+// RandomAccount generates random numbers of employee
+func (f *Faker) RandomAccount(min, max int64) int64 {
+	return min + rand.Int63n(max-min+1)
+}
